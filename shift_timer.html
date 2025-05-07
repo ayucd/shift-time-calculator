@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ayushi's Shift Time Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1rem;
+    }
+
+    input[type="time"] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #liveClock {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #666;
+    }
+
+    #output {
+      margin-top: 40px;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Ayushi's Shift Time Calculator</h2>
+  <label for="checkin">Enter Check-in Time (24-hour format): </label>
+  <input type="time" id="checkin" required />
+  <button onclick="calculateTimeLeft()">Calculate</button>
+
+  <div id="liveClock"></div>
+  <p id="output"></p>
+
+  <script>
+    function calculateTimeLeft() {
+      const checkinTime = document.getElementById("checkin").value;
+      if (!checkinTime) return;
+
+      const now = new Date();
+      const [hours, minutes] = checkinTime.split(":");
+      const checkin = new Date();
+      checkin.setHours(hours, minutes, 0);
+
+      const diffMs = now - checkin;
+      const diffHours = diffMs / (1000 * 60 * 60);
+      const remaining = 9 - diffHours;
+
+      const hoursLeft = Math.floor(remaining);
+      const minsLeft = Math.floor((remaining - hoursLeft) * 60);
+
+      document.getElementById("output").innerText =
+        remaining <= 0
+          ? "✅ Shift complete!"
+          : `⏳ Time left: ${hoursLeft} hours and ${minsLeft} minutes`;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("liveClock").innerText = "Current Time: " + now.toLocaleTimeString();
+    }
+
+    // Update every minute
+    setInterval(() => {
+      updateClock();
+      calculateTimeLeft();
+    }, 60000);
+
+    updateClock(); // Show clock immediately
+  </script>
+</body>
+</html>
